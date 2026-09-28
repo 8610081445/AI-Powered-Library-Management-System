@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AthenaLib - AI-Powered Library Management System</title>
+    <meta name="description" content="Next-generation intelligent library management system with AI semantic discovery, automated circulation, real-time analytics, and conversational assistant.">
+    
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom Design System Styles -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-brain-circuit"></i>
+                </div>
+                <div class="brand-text">
+                    <h2>Athena<span>Lib</span></h2>
+                    <span class="badge-ai"><i class="fa-solid fa-sparkles"></i> AI 2.0</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">CORE SYSTEMS</div>
+                <button class="nav-item active" data-view="dashboard" id="nav-dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-view="catalog" id="nav-catalog">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                    <span>Book Catalog</span>
+                    <span class="nav-counter" id="catalog-count">15</span>
+                </button>
+                <button class="nav-item" data-view="circulation" id="nav-circulation">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    <span>Circulation</span>
+                    <span class="nav-pill-alert" id="active-loans-pill">3</span>
+                </button>
+                <button class="nav-item" data-view="members" id="nav-members">
+                    <i class="fa-solid fa-users-gear"></i>
+                    <span>Members</span>
+                </button>
+
+                <div class="nav-section-label">AI INTELLIGENCE</div>
+                <button class="nav-item" data-view="ai-hub" id="nav-ai-hub">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>AI Hub & Discovery</span>
+                    <span class="nav-pill-glow">Smart</span>
+                </button>
+
+                <div class="nav-section-label">SYSTEM</div>
+                <button class="nav-item" data-view="settings" id="nav-settings">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>Config & DB</span>
+                </button>
+
+                <div class="nav-section-label">MY PORTAL</div>
+                <button class="nav-item" data-view="my-account" id="nav-my-account">
+                    <i class="fa-solid fa-circle-user"></i>
+                    <span>My Account</span>
+                    <span class="nav-pill-glow" id="my-loans-nav-badge">0</span>
+                </button>
+                <button class="nav-item" data-view="login" id="nav-login">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    <span id="nav-login-label">Sign In / Join</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="db-status-widget" id="sidebar-db-status">
+                    <div class="status-indicator online"></div>
+                    <div class="status-text">
+                        <small>Active Database</small>
+                        <strong id="db-engine-label">EMBEDDED DB</strong>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN VIEW WRAPPER -->
+        <div class="main-wrapper">
+            <!-- TOP APP HEADER -->
+            <header class="app-header">
+                <div class="header-left">
+                    <button class="mobile-toggle" id="mobile-toggle-btn" aria-label="Toggle Menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="global-search-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="global-search-input" placeholder="Search catalog, members, ISBN, or ask Athena AI..." autocomplete="off">
+                        <span class="search-shortcut">⌘K</span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <button class="btn btn-outline" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
+                        <i class="fa-solid fa-moon theme-icon"></i>
+                    </button>
+                    <button class="btn btn-secondary" id="btn-quick-athena">
+                        <i class="fa-solid fa-robot"></i>
+                        <span>Ask Athena AI</span>
+                    </button>
+                    <button class="btn btn-primary" id="btn-open-add-book">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>New Book</span>
+                    </button>
+                    <div class="user-header-widget" id="user-header-widget">
+                        <div class="user-profile-badge" id="btn-user-profile-badge" tabindex="0" title="Account Menu">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="User Avatar" class="avatar-sm" id="header-user-avatar">
+                            <div class="user-meta">
+                                <strong id="header-user-name">Chief Librarian</strong>
+                                <small id="header-user-role">Admin Access</small>
+                            </div>
+                            <i class="fa-solid fa-chevron-down profile-chevron"></i>
+                        </div>
+                        <div class="user-profile-dropdown hidden" id="user-profile-dropdown">
+                            <div class="dropdown-user-info">
+                                <div class="dropdown-avatar-wrap">
+                                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="avatar-md" id="dropdown-user-avatar" alt="Avatar">
+                                </div>
+                                <div class="dropdown-user-details">
+                                    <strong id="dropdown-user-name">Chief Librarian</strong>
+                                    <small id="dropdown-user-email">admin@athenalib.io</small>
+                                    <span class="badge badge-primary" id="dropdown-user-badge">Administrator</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item" id="dropdown-btn-my-account">
+                                <i class="fa-solid fa-circle-user"></i>
+                                <span>My Account & Loans</span>
+                            </button>
+                            <button class="dropdown-item" id="dropdown-btn-login-page">
+                                <i class="fa-solid fa-arrows-split-up-and-left"></i>
+                                <span>Switch Account / Sign In</span>
+                            </button>
+                            <div class="dropdown-divider"></div>
+                            <button class="dropdown-item text-danger" id="dropdown-btn-logout">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                <span>Sign Out</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- CONTENT BODY CONTAINER -->
+            <main class="content-body" id="content-body">
+                
+                <!-- 1. DASHBOARD VIEW -->
+                <section class="view-panel active" id="view-dashboard">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">Library Intelligence Overview</h1>
+                            <p class="view-subtitle">Real-time circulation metrics, inventory distribution, and automated alerts.</p>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn btn-ghost" id="btn-refresh-stats">
+                                <i class="fa-solid fa-rotate-right"></i> Refresh
+                            </button>
+                            <button class="btn btn-gradient" id="btn-quick-issue">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Issue Book
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KPI METRIC CARDS -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card card-glow-indigo">
+                            <div class="kpi-icon"><i class="fa-solid fa-book"></i></div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Catalog Titles</span>
+                                <h2 class="kpi-value" id="kpi-titles">0</h2>
+                                <span class="kpi-subtext" id="kpi-copies-sub">Loading copies...</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-glow-emerald">
+                            <div class="kpi-icon"><i class="fa-solid fa-bookmark"></i></div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Available Copies</span>
+                                <h2 class="kpi-value" id="kpi-available">0</h2>
+                                <span class="kpi-subtext text-success" id="kpi-avail-rate">Ready to loan</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-glow-purple">
+                            <div class="kpi-icon"><i class="fa-solid fa-hand-holding-hand"></i></div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Active Loans</span>
+                                <h2 class="kpi-value" id="kpi-active-loans">0</h2>
+                                <span class="kpi-subtext" id="kpi-issued-sub">In circulation</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-glow-rose">
+                            <div class="kpi-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Overdue Books</span>
+                                <h2 class="kpi-value text-danger" id="kpi-overdue">0</h2>
+                                <span class="kpi-subtext text-danger" id="kpi-fines-sub">Pending fines: $0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-glow-cyan">
+                            <div class="kpi-icon"><i class="fa-solid fa-users"></i></div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Registered Members</span>
+                                <h2 class="kpi-value" id="kpi-members">0</h2>
+                                <span class="kpi-subtext">Students, Faculty & Scholars</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-glow-amber">
+                            <div class="kpi-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Fines Collected</span>
+                                <h2 class="kpi-value" id="kpi-collected-fines">$0.00</h2>
+                                <span class="kpi-subtext text-success">Total Cleared</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DASHBOARD CONTENT SPLIT -->
+                    <div class="dashboard-split-grid">
+                        <!-- Left Column: Category Distribution & Top Books -->
+                        <div class="dash-col-left">
+                            <div class="glass-card">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <i class="fa-solid fa-chart-pie text-accent"></i>
+                                        <h3>Category Distribution</h3>
+                                    </div>
+                                    <span class="card-tag">Collection Scope</span>
+                                </div>
+                                <div class="category-bars-list" id="category-bars-list">
+                                    <!-- Dynamic Category Breakdown -->
+                                    <div class="skeleton-loader"></div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card mt-4">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <i class="fa-solid fa-fire-flame-curved text-warning"></i>
+                                        <h3>Top Borrowed Books</h3>
+                                    </div>
+                                    <span class="card-tag">High Demand</span>
+                                </div>
+                                <div class="top-books-list" id="top-books-list">
+                                    <!-- Dynamic Top Books -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Recent Activity & Quick Athena Box -->
+                        <div class="dash-col-right">
+                            <div class="glass-card ai-welcome-card">
+                                <div class="ai-card-glow"></div>
+                                <div class="ai-welcome-content">
+                                    <div class="ai-avatar-badge">
+                                        <i class="fa-solid fa-brain-circuit"></i>
+                                    </div>
+                                    <div>
+                                        <h3>Athena AI Librarian is Online</h3>
+                                        <p>Smart natural language queries, book recommendations, and automatic metadata extraction are fully functional.</p>
+                                    </div>
+                                </div>
+                                <div class="quick-prompt-chips">
+                                    <button class="chip-btn" data-query="What books do you have on Artificial Intelligence?">"AI Books?"</button>
+                                    <button class="chip-btn" data-query="Recommend a high-rated science fiction novel">"Recommend Sci-Fi"</button>
+                                    <button class="chip-btn" data-query="How do overdue fines work?">"Overdue policy?"</button>
+                                </div>
+                            </div>
+
+                            <div class="glass-card mt-4">
+                                <div class="card-header">
+                                    <div class="card-title-group">
+                                        <i class="fa-solid fa-clock-rotate-left text-info"></i>
+                                        <h3>Recent Circulation Activity</h3>
+                                    </div>
+                                    <button class="btn btn-xs btn-outline" onclick="app.switchView('circulation')">View All</button>
+                                </div>
+                                <div class="activity-timeline" id="recent-activity-list">
+                                    <!-- Dynamic Activity List -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. CATALOG VIEW -->
+                <section class="view-panel" id="view-catalog">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">Book Catalog Explorer</h1>
+                            <p class="view-subtitle">Search, filter, and manage your entire library inventory.</p>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn btn-primary" id="btn-catalog-add-book">
+                                <i class="fa-solid fa-plus"></i> Add New Book
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CATALOG TOOLBAR -->
+                    <div class="catalog-toolbar">
+                        <div class="filter-group">
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="catalog-search" placeholder="Search by title, author, category, ISBN, or tag...">
+                            </div>
+
+                            <select id="catalog-category-filter" class="select-control">
+                                <option value="All">All Categories</option>
+                                <option value="Artificial Intelligence">Artificial Intelligence</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Science Fiction">Science Fiction</option>
+                                <option value="Psychology">Psychology</option>
+                                <option value="Personal Development">Personal Development</option>
+                                <option value="Science">Science</option>
+                                <option value="History & Philosophy">History & Philosophy</option>
+                            </select>
+
+                            <select id="catalog-stock-filter" class="select-control">
+                                <option value="all">All Status</option>
+                                <option value="available">Available Copies Only</option>
+                                <option value="out_of_stock">All Copies Borrowed</option>
+                            </select>
+
+                            <select id="catalog-sort" class="select-control">
+                                <option value="id_desc">Newest First</option>
+                                <option value="rating_desc">Highest Rated</option>
+                                <option value="title_asc">Title (A - Z)</option>
+                                <option value="year_desc">Publication Year</option>
+                            </select>
+                        </div>
+
+                        <div class="view-mode-toggle">
+                            <button class="btn-toggle active" id="btn-view-grid" title="Grid View"><i class="fa-solid fa-grip"></i></button>
+                            <button class="btn-toggle" id="btn-view-table" title="Table View"><i class="fa-solid fa-list"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- BOOKS GRID VIEW -->
+                    <div class="books-grid" id="books-grid-container">
+                        <!-- Dynamic Book Cards -->
+                    </div>
+
+                    <!-- BOOKS TABLE VIEW (Hidden by default) -->
+                    <div class="books-table-container glass-card hidden" id="books-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Book</th>
+                                    <th>Category</th>
+                                    <th>ISBN</th>
+                                    <th>Stock</th>
+                                    <th>Rating</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="books-table-body">
+                                <!-- Dynamic Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 3. CIRCULATION VIEW -->
+                <section class="view-panel" id="view-circulation">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">Circulation & Loan Tracking</h1>
+                            <p class="view-subtitle">Issue books, process returns, calculate late fees, and extend loans.</p>
+                        </div>
+                    </div>
+
+                    <!-- CIRCULATION TABS -->
+                    <div class="sub-nav-tabs">
+                        <button class="sub-tab active" data-sub="active-loans">
+                            <i class="fa-solid fa-book-open-reader"></i> Active Loans
+                        </button>
+                        <button class="sub-tab" data-sub="issue-form">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Issue Book
+                        </button>
+                        <button class="sub-tab" data-sub="return-form">
+                            <i class="fa-solid fa-arrow-down-to-bracket"></i> Return & Clear Fines
+                        </button>
+                        <button class="sub-tab" data-sub="loan-history">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Loan History
+                        </button>
+                    </div>
+
+                    <!-- TAB 1: ACTIVE LOANS TABLE -->
+                    <div class="sub-panel active" id="sub-panel-active-loans">
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <i class="fa-solid fa-list-check text-accent"></i>
+                                    <h3>Currently Issued Books</h3>
+                                </div>
+                                <div class="badge badge-info" id="active-loans-count-badge">0 active</div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Book Details</th>
+                                            <th>Borrower</th>
+                                            <th>Issue Date</th>
+                                            <th>Due Date</th>
+                                            <th>Status</th>
+                                            <th>Accrued Fine</th>
+                                            <th>Circulation Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="active-loans-tbody">
+                                        <!-- Dynamic Active Loans -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: ISSUE FORM -->
+                    <div class="sub-panel" id="sub-panel-issue-form">
+                        <div class="glass-card form-card-wide">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-accent"></i>
+                                    <h3>Issue Book to Member</h3>
+                                </div>
+                            </div>
+                            <form id="form-issue-book">
+                                <div class="form-row">
+                                    <div class="form-group flex-1">
+                                        <label for="issue-book-select">Select Book (Title / Author)</label>
+                                        <select id="issue-book-select" class="form-control" required>
+                                            <option value="">Choose an available book...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group flex-1">
+                                        <label for="issue-member-select">Select Member</label>
+                                        <select id="issue-member-select" class="form-control" required>
+                                            <option value="">Choose active member...</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group flex-1">
+                                        <label for="issue-loan-days">Loan Duration (Days)</label>
+                                        <select id="issue-loan-days" class="form-control">
+                                            <option value="7">7 Days (Fast Read)</option>
+                                            <option value="14" selected>14 Days (Standard Loan)</option>
+                                            <option value="21">21 Days (Extended Research)</option>
+                                            <option value="30">30 Days (Faculty Privilege)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group flex-1">
+                                        <label for="issue-notes">Circulation Notes / Condition</label>
+                                        <input type="text" id="issue-notes" class="form-control" placeholder="e.g., Pristine condition, with jacket">
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa-solid fa-check"></i> Complete Checkout
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: RETURN / CHECK-IN FORM -->
+                    <div class="sub-panel" id="sub-panel-return-form">
+                        <div class="glass-card form-card-wide">
+                            <div class="card-header">
+                                <div class="card-title-group">
+                                    <i class="fa-solid fa-arrow-down-to-bracket text-emerald"></i>
+                                    <h3>Return Book & Settle Fine</h3>
+                                </div>
+                            </div>
+                            <form id="form-return-book">
+                                <div class="form-group">
+                                    <label for="return-loan-select">Select Active Loan to Check In</label>
+                                    <select id="return-loan-select" class="form-control" required>
+                                        <option value="">Select active loan record...</option>
+                                    </select>
+                                </div>
+
+                                <div class="return-calculation-preview hidden" id="return-preview-box">
+                                    <div class="preview-metric">
+                                        <span>Status:</span>
+                                        <strong id="preview-loan-status">-</strong>
+                                    </div>
+                                    <div class="preview-metric">
+                                        <span>Due Date:</span>
+                                        <strong id="preview-loan-due">-</strong>
+                                    </div>
+                                    <div class="preview-metric">
+                                        <span>Overdue Days:</span>
+                                        <strong id="preview-loan-overdue-days" class="text-danger">0 days</strong>
+                                    </div>
+                                    <div class="preview-metric">
+                                        <span>Calculated Fine ($0.50/day):</span>
+                                        <strong id="preview-loan-fine" class="text-danger">$0.00</strong>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-3">
+                                    <label for="return-notes">Return Remarks</label>
+                                    <input type="text" id="return-notes" class="form-control" placeholder="e.g. Returned on time, excellent condition">
+                                </div>
+
+                                <div class="form-checkbox">
+                                    <input type="checkbox" id="waive-fine-check">
+                                    <label for="waive-fine-check">Waive overdue fine (Librarian discretion)</label>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-emerald">
+                                        <i class="fa-solid fa-arrow-down-to-bracket"></i> Confirm Check-In & Restock
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: LOAN HISTORY -->
+                    <div class="sub-panel" id="sub-panel-loan-history">
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3>Full Circulation Audit Log</h3>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Book</th>
+                                            <th>Borrower</th>
+                                            <th>Issued</th>
+                                            <th>Due</th>
+                                            <th>Returned</th>
+                                            <th>Status</th>
+                                            <th>Fine</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="history-loans-tbody">
+                                        <!-- Dynamic History -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. MEMBERS VIEW -->
+                <section class="view-panel" id="view-members">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">Library Members Directory</h1>
+                            <p class="view-subtitle">Manage memberships, verify borrowing privileges, and track user loan records.</p>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn btn-primary" id="btn-open-add-member">
+                                <i class="fa-solid fa-user-plus"></i> Register Member
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="catalog-toolbar">
+                        <div class="filter-group">
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="member-search" placeholder="Search by name, email, code or phone...">
+                            </div>
+                            <select id="member-tier-filter" class="select-control">
+                                <option value="All">All Tiers</option>
+                                <option value="Student">Student (Max 5)</option>
+                                <option value="Faculty">Faculty (Max 10)</option>
+                                <option value="Scholar">Scholar (Max 8)</option>
+                                <option value="Premium">Premium (Max 12)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="members-grid" id="members-grid-container">
+                        <!-- Dynamic Members Cards -->
+                    </div>
+                </section>
+
+                <!-- 5. AI HUB & SEMANTIC DISCOVERY VIEW -->
+                <section class="view-panel" id="view-ai-hub">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">Athena AI Intelligence Hub</h1>
+                            <p class="view-subtitle">Deep semantic book discovery, AI summarization, and intelligent recommendation algorithms.</p>
+                        </div>
+                    </div>
+
+                    <div class="ai-hub-container">
+                        <!-- Feature 1: Semantic Natural Language Search -->
+                        <div class="glass-card ai-feature-card">
+                            <div class="ai-feature-header">
+                                <div class="badge-ai-lg"><i class="fa-solid fa-brain"></i></div>
+                                <div>
+                                    <h3>Semantic Book Search</h3>
+                                    <p>Find books using natural descriptions, moods, philosophical questions, or analogies.</p>
+                                </div>
+                            </div>
+
+                            <div class="semantic-search-box">
+                                <textarea id="ai-semantic-query" rows="2" placeholder="e.g. 'I want a thought-provoking science fiction book exploring consciousness, artificial intelligence, and space exploration...'"></textarea>
+                                <button class="btn btn-gradient" id="btn-run-semantic-search">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Run Semantic Search
+                                </button>
+                            </div>
+
+                            <div class="semantic-results-area" id="semantic-results-container">
+                                <div class="empty-state-hint">
+                                    <i class="fa-solid fa-sparkles"></i>
+                                    <span>Enter any phrase or scenario above to see AI semantic relevance matching.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Feature 2: AI Book Summarizer & Deep Takeaways -->
+                        <div class="glass-card ai-feature-card mt-4">
+                            <div class="ai-feature-header">
+                                <div class="badge-ai-lg"><i class="fa-solid fa-file-lines"></i></div>
+                                <div>
+                                    <h3>AI Book Summarizer & Key Insights</h3>
+                                    <p>Generates 3 core takeaways, target audience breakdown, reading difficulty, and study verdict.</p>
+                                </div>
+                            </div>
+
+                            <div class="summarizer-controls">
+                                <select id="summarizer-book-select" class="form-control">
+                                    <option value="">Choose a book to summarize...</option>
+                                </select>
+                                <button class="btn btn-secondary" id="btn-run-summarizer">
+                                    <i class="fa-solid fa-bolt"></i> Generate Insights
+                                </button>
+                            </div>
+
+                            <div class="summarizer-result-card hidden" id="summarizer-result-box">
+                                <!-- Dynamic Structured Summary Output -->
+                            </div>
+                        </div>
+
+                        <!-- Feature 3: Personalized Recommendations Engine -->
+                        <div class="glass-card ai-feature-card mt-4">
+                            <div class="ai-feature-header">
+                                <div class="badge-ai-lg"><i class="fa-solid fa-compass"></i></div>
+                                <div>
+                                    <h3>Personalized Reading Recommendations</h3>
+                                    <p>Context-aware recommendation matrix tailored to member profiles and borrowing history.</p>
+                                </div>
+                            </div>
+
+                            <div class="recommend-controls">
+                                <select id="recommend-member-select" class="form-control">
+                                    <option value="">Select a member profile...</option>
+                                </select>
+                                <button class="btn btn-primary" id="btn-run-recommendations">
+                                    <i class="fa-solid fa-magnifying-glass-chart"></i> Get AI Picks
+                                </button>
+                            </div>
+
+                            <div class="recommend-results-grid mt-3" id="recommend-results-container">
+                                <!-- Dynamic Recommendations -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. SETTINGS VIEW -->
+                <section class="view-panel" id="view-settings">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">System & Database Settings</h1>
+                            <p class="view-subtitle">Database connection status, fine rates, and AI model parameters.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card settings-card">
+                        <h3>Database Architecture</h3>
+                        <p>AthenaLib uses a resilient dual-engine database layer that automatically connects to MySQL or operates on an embedded persistent store.</p>
+                        
+                        <div class="db-info-box" id="settings-db-info">
+                            <div class="db-info-row">
+                                <span>Current Engine:</span>
+                                <strong id="settings-engine-val">Loading...</strong>
+                            </div>
+                            <div class="db-info-row">
+                                <span>Status:</span>
+                                <span class="badge badge-success">Operational</span>
+                            </div>
+                            <div class="db-info-row">
+                                <span>Data File:</span>
+                                <code id="settings-db-file">library_store.json</code>
+                            </div>
+                        </div>
+
+                        <h3 class="mt-4">Circulation Policies</h3>
+                        <div class="form-row">
+                            <div class="form-group flex-1">
+                                <label>Standard Loan Period</label>
+                                <input type="text" class="form-control" value="14 Days" readonly>
+                            </div>
+                            <div class="form-group flex-1">
+                                <label>Daily Overdue Fine</label>
+                                <input type="text" class="form-control" value="$0.50 / day" readonly>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button class="btn btn-secondary" id="btn-reseed-data">
+                                <i class="fa-solid fa-database"></i> Re-Seed Sample Data
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. LOGIN & SIGN UP VIEW -->
+                <section class="view-panel" id="view-login">
+                    <div class="auth-view-wrapper">
+                        <!-- Ambient backdrop glow -->
+                        <div class="auth-glow-orb orb-1"></div>
+                        <div class="auth-glow-orb orb-2"></div>
+
+                        <div class="auth-card glass-card">
+                            <!-- Auth Card Header -->
+                            <div class="auth-header">
+                                <div class="brand-badge">
+                                    <i class="fa-solid fa-brain-circuit"></i>
+                                    <span>AthenaLib Auth</span>
+                                </div>
+                                <h1 class="auth-title" id="auth-main-title">Welcome to AthenaLib</h1>
+                                <p class="auth-subtitle" id="auth-main-subtitle">Sign in to your library account to access smart AI search, borrow books, and manage circulation.</p>
+                                
+                                <!-- Mode Switcher Tabs -->
+                                <div class="auth-tabs">
+                                    <button class="auth-tab-btn active" id="tab-btn-signin" type="button">
+                                        <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In
+                                    </button>
+                                    <button class="auth-tab-btn" id="tab-btn-signup" type="button">
+                                        <i class="fa-solid fa-user-plus"></i> Create Account
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 1-CLICK QUICK DEMO LOGINS BAR -->
+                            <div class="demo-logins-box" id="demo-logins-container">
+                                <div class="demo-box-label">
+                                    <i class="fa-solid fa-bolt-lightning"></i>
+                                    <span>1-Click Demo Profiles:</span>
+                                </div>
+                                <div class="demo-buttons-row">
+                                    <button class="btn-demo-badge" type="button" onclick="app.quickFillDemo('admin')">
+                                        <span class="demo-role admin">👑 Admin</span>
+                                        <small>Chief Librarian</small>
+                                    </button>
+                                    <button class="btn-demo-badge" type="button" onclick="app.quickFillDemo('student')">
+                                        <span class="demo-role student">🎓 Student</span>
+                                        <small>Dev Patel</small>
+                                    </button>
+                                    <button class="btn-demo-badge" type="button" onclick="app.quickFillDemo('faculty')">
+                                        <span class="demo-role faculty">🔬 Faculty</span>
+                                        <small>Dr. Sophia</small>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- SIGN IN FORM -->
+                            <form id="form-signin" class="auth-form active">
+                                <div class="form-group">
+                                    <label for="signin-email"><i class="fa-regular fa-envelope"></i> Email Address</label>
+                                    <input type="email" id="signin-email" class="form-control" placeholder="e.g. dev.patel@library.edu" required autocomplete="username">
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="label-with-action">
+                                        <label for="signin-password"><i class="fa-solid fa-lock"></i> Password</label>
+                                        <button type="button" class="link-action-btn" id="btn-forgot-password" tabindex="-1">Demo: password123</button>
+                                    </div>
+                                    <div class="password-input-wrap">
+                                        <input type="password" id="signin-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+                                        <button type="button" class="btn-toggle-pw" id="btn-toggle-signin-pw" aria-label="Toggle password visibility">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="auth-options-row">
+                                    <label class="checkbox-container">
+                                        <input type="checkbox" id="signin-remember" checked>
+                                        <span class="checkmark"></span>
+                                        <span>Remember my session</span>
+                                    </label>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block btn-lg mt-3" id="btn-submit-signin">
+                                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                    <span>Sign In to AthenaLib</span>
+                                </button>
+                            </form>
+
+                            <!-- SIGN UP / CREATE ACCOUNT FORM -->
+                            <form id="form-signup" class="auth-form">
+                                <div class="form-group">
+                                    <label for="signup-name"><i class="fa-regular fa-user"></i> Full Name</label>
+                                    <input type="text" id="signup-name" class="form-control" placeholder="e.g. Marcus Vance" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="signup-email"><i class="fa-regular fa-envelope"></i> Email Address</label>
+                                    <input type="email" id="signup-email" class="form-control" placeholder="e.g. marcus@innovate.tech" required>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group flex-1">
+                                        <label for="signup-phone"><i class="fa-solid fa-phone"></i> Phone Number</label>
+                                        <input type="tel" id="signup-phone" class="form-control" placeholder="+1 (555) 000-0000">
+                                    </div>
+                                    <div class="form-group flex-1">
+                                        <label for="signup-tier"><i class="fa-solid fa-award"></i> Membership Tier</label>
+                                        <select id="signup-tier" class="form-control">
+                                            <option value="Student">Student (Max 5 Books)</option>
+                                            <option value="Faculty">Faculty (Max 10 Books)</option>
+                                            <option value="Scholar">Scholar (Max 8 Books)</option>
+                                            <option value="Premium">Premium (Max 12 Books)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="signup-password"><i class="fa-solid fa-lock"></i> Create Password</label>
+                                    <div class="password-input-wrap">
+                                        <input type="password" id="signup-password" class="form-control" placeholder="Minimum 6 characters" required minlength="6" autocomplete="new-password">
+                                        <button type="button" class="btn-toggle-pw" id="btn-toggle-signup-pw" aria-label="Toggle password visibility">
+                                            <i class="fa-regular fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-gradient btn-block btn-lg mt-3" id="btn-submit-signup">
+                                    <i class="fa-solid fa-id-card"></i>
+                                    <span>Create Account & Get Member Card</span>
+                                </button>
+                            </form>
+
+                            <!-- Security / Feature Badges -->
+                            <div class="auth-security-footer">
+                                <div class="security-item">
+                                    <i class="fa-solid fa-shield-halved text-emerald"></i>
+                                    <span>256-Bit Encrypted Token</span>
+                                </div>
+                                <div class="security-item">
+                                    <i class="fa-solid fa-bolt text-amber"></i>
+                                    <span>Instant Digital Library ID</span>
+                                </div>
+                                <div class="security-item">
+                                    <i class="fa-solid fa-sparkles text-cyan"></i>
+                                    <span>Athena AI 2.0 Access</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. MY ACCOUNT & MEMBER PORTAL VIEW -->
+                <section class="view-panel" id="view-my-account">
+                    <div class="view-header">
+                        <div>
+                            <h1 class="view-title">My Account & Member Portal</h1>
+                            <p class="view-subtitle">Access your digital membership card, review active borrowed titles, renew loans, and edit account credentials.</p>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn btn-secondary" onclick="app.switchView('catalog')">
+                                <i class="fa-solid fa-book-bookmark"></i> Browse Catalog
+                            </button>
+                            <button class="btn btn-outline text-danger" onclick="app.handleLogout()">
+                                <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Digital Library Card & Top Account Banner -->
+                    <div class="account-hero-grid">
+                        <!-- Digital Membership Card Hologram -->
+                        <div class="digital-member-card">
+                            <div class="card-chip-row">
+                                <div class="emv-chip"></div>
+                                <div class="card-brand">
+                                    <i class="fa-solid fa-brain-circuit"></i>
+                                    <span>AthenaLib</span>
+                                </div>
+                            </div>
+                            <div class="card-member-details">
+                                <span class="card-tier-pill" id="myacc-card-tier">Student Member</span>
+                                <h2 class="card-member-name" id="myacc-card-name">Dev Patel</h2>
+                                <div class="card-member-email" id="myacc-card-email">dev.patel@library.edu</div>
+                            </div>
+                            <div class="card-barcode-row">
+                                <div class="card-barcode-lines">
+                                    <span class="barcode-strip"></span>
+                                </div>
+                                <div class="card-code-display">
+                                    <small>MEMBER ID</small>
+                                    <strong id="myacc-card-code">MEM-1001</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- User Profile Information Card -->
+                        <div class="glass-card profile-info-card">
+                            <div class="profile-info-header">
+                                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" class="avatar-lg" id="myacc-profile-avatar" alt="Avatar">
+                                <div>
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        <h2 id="myacc-profile-name" style="margin:0;">Dev Patel</h2>
+                                        <span class="status-indicator online" title="Account Active"></span>
+                                    </div>
+                                    <div class="profile-meta-tags">
+                                        <span class="badge badge-primary" id="myacc-role-badge">Member</span>
+                                        <span class="badge badge-success" id="myacc-status-badge">Active</span>
+                                        <span class="badge-outline" id="myacc-tier-badge">Student Tier</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="profile-details-grid">
+                                <div class="profile-detail-item">
+                                    <small>Email</small>
+                                    <strong id="myacc-detail-email">dev.patel@library.edu</strong>
+                                </div>
+                                <div class="profile-detail-item">
+                                    <small>Phone</small>
+                                    <strong id="myacc-detail-phone">+1 (555) 234-5678</strong>
+                                </div>
+                                <div class="profile-detail-item">
+                                    <small>Member ID</small>
+                                    <strong id="myacc-detail-code">MEM-1001</strong>
+                                </div>
+                                <div class="profile-detail-item">
+                                    <small>Account Role</small>
+                                    <strong id="myacc-detail-role">Library Member</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI METRICS ROW -->
+                    <div class="kpi-grid mt-4">
+                        <div class="kpi-card card-glow-indigo">
+                            <div class="kpi-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Currently Borrowed</span>
+                                <h2 class="kpi-value" id="myacc-kpi-active">1</h2>
+                                <span class="kpi-subtext">Active checkout titles</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-glow-emerald">
+                            <div class="kpi-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Returned Books</span>
+                                <h2 class="kpi-value" id="myacc-kpi-returned">0</h2>
+                                <span class="kpi-subtext">Completed reading history</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-glow-amber">
+                            <div class="kpi-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Unpaid Fines</span>
+                                <h2 class="kpi-value" id="myacc-kpi-fines">$0.00</h2>
+                                <span class="kpi-subtext" id="myacc-fines-status">No balance due</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-glow-rose">
+                            <div class="kpi-icon"><i class="fa-solid fa-layer-group"></i></div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Borrowing Quota</span>
+                                <h2 class="kpi-value"><span id="myacc-quota-used">1</span> / <span id="myacc-quota-max">5</span></h2>
+                                <div class="quota-progress-track">
+                                    <div class="quota-progress-fill" id="myacc-quota-bar" style="width: 20%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ACCOUNT TABS & CONTENT -->
+                    <div class="account-subnav mt-4">
+                        <button class="account-tab active" id="acc-tab-loans" onclick="app.switchAccountTab('loans')">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                            <span>Currently Borrowed</span>
+                            <span class="nav-counter" id="myacc-loans-counter">1</span>
+                        </button>
+                        <button class="account-tab" id="acc-tab-history" onclick="app.switchAccountTab('history')">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span>Loan History</span>
+                        </button>
+                        <button class="account-tab" id="acc-tab-settings" onclick="app.switchAccountTab('settings')">
+                            <i class="fa-solid fa-user-gear"></i>
+                            <span>Edit Profile & Password</span>
+                        </button>
+                    </div>
+
+                    <!-- SUB-PANEL 1: CURRENTLY BORROWED BOOKS -->
+                    <div class="account-panel active" id="acc-panel-loans">
+                        <div class="glass-card">
+                            <div class="card-header-flex">
+                                <div>
+                                    <h3>My Active Book Loans</h3>
+                                    <p class="text-muted">Books you have currently checked out. You can extend your return deadline by renewing 7 days.</p>
+                                </div>
+                                <button class="btn btn-sm btn-ghost" onclick="app.refreshAccountData()">
+                                    <i class="fa-solid fa-rotate-right"></i> Refresh
+                                </button>
+                            </div>
+                            <div class="my-loans-container mt-3" id="my-active-loans-list">
+                                <!-- Dynamic Loan Cards Rendered by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL 2: LOAN HISTORY -->
+                    <div class="account-panel" id="acc-panel-history">
+                        <div class="glass-card">
+                            <div class="card-header-flex">
+                                <div>
+                                    <h3>Past Circulation History</h3>
+                                    <p class="text-muted">A comprehensive record of all books you have checked out and returned to AthenaLib.</p>
+                                </div>
+                            </div>
+                            <div class="table-responsive mt-3">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Book Title</th>
+                                            <th>Issue Date</th>
+                                            <th>Return Date</th>
+                                            <th>Status</th>
+                                            <th>Fine Paid</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="my-history-tbody">
+                                        <!-- Dynamic History Rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SUB-PANEL 3: EDIT PROFILE & PASSWORD SETTINGS -->
+                    <div class="account-panel" id="acc-panel-settings">
+                        <div class="account-settings-grid">
+                            <!-- Update Details Form -->
+                            <div class="glass-card">
+                                <h3>Personal Details</h3>
+                                <p class="text-muted">Update your display name and contact phone number.</p>
+                                <form id="form-update-profile" class="mt-3">
+                                    <div class="form-group">
+                                        <label for="profile-name">Full Name</label>
+                                        <input type="text" id="profile-name" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-phone">Phone Number</label>
+                                        <input type="tel" id="profile-phone" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-avatar">Avatar Image URL</label>
+                                        <input type="url" id="profile-avatar" class="form-control" placeholder="https://images.unsplash.com/...">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mt-2">
+                                        <i class="fa-solid fa-floppy-disk"></i> Save Profile Details
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- Change Password Form -->
+                            <div class="glass-card">
+                                <h3>Security & Password</h3>
+                                <p class="text-muted">Change your account password to keep your library account secure.</p>
+                                <form id="form-change-password" class="mt-3">
+                                    <div class="form-group">
+                                        <label for="change-pw-current">Current Password</label>
+                                        <input type="password" id="change-pw-current" class="form-control" required placeholder="••••••••">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="change-pw-new">New Password</label>
+                                        <input type="password" id="change-pw-new" class="form-control" required minlength="6" placeholder="Minimum 6 characters">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="change-pw-confirm">Confirm New Password</label>
+                                        <input type="password" id="change-pw-confirm" class="form-control" required minlength="6" placeholder="Repeat new password">
+                                    </div>
+                                    <button type="submit" class="btn btn-gradient mt-2">
+                                        <i class="fa-solid fa-key"></i> Update Password
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT BOOK -->
+    <div class="modal-overlay" id="modal-book">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3 id="modal-book-title">Add New Book to Catalog</h3>
+                <button class="modal-close" id="btn-close-book-modal">&times;</button>
+            </div>
+            <form id="form-book">
+                <input type="hidden" id="book-edit-id">
+                <div class="modal-body">
+                    <!-- AI Auto-Fill Helper Bar -->
+                    <div class="ai-helper-banner">
+                        <div class="ai-helper-text">
+                            <i class="fa-solid fa-wand-magic-sparkles text-accent"></i>
+                            <span>Type the Title and Author, then click <strong>AI Auto-Fill</strong> to automatically generate Category, Tags, and Summary!</span>
+                        </div>
+                        <button type="button" class="btn btn-xs btn-gradient" id="btn-ai-autofill">
+                            <i class="fa-solid fa-sparkles"></i> AI Auto-Fill
+                        </button>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label for="book-input-title">Book Title *</label>
+                            <input type="text" id="book-input-title" class="form-control" placeholder="e.g. Artificial Intelligence: A Modern Approach" required>
+                        </div>
+                        <div class="form-group flex-2">
+                            <label for="book-input-author">Author(s) *</label>
+                            <input type="text" id="book-input-author" class="form-control" placeholder="e.g. Stuart Russell & Peter Norvig" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="book-input-category">Category *</label>
+                            <input type="text" id="book-input-category" class="form-control" placeholder="e.g. Artificial Intelligence" required>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="book-input-isbn">ISBN Code</label>
+                            <input type="text" id="book-input-isbn" class="form-control" placeholder="978-0134610993">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="book-input-quantity">Total Copies *</label>
+                            <input type="number" id="book-input-quantity" class="form-control" min="1" value="5" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-2">
+                            <label for="book-input-cover">Cover Image URL</label>
+                            <input type="url" id="book-input-cover" class="form-control" placeholder="https://images.unsplash.com/...">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="book-input-year">Published Year</label>
+                            <input type="number" id="book-input-year" class="form-control" value="2024">
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="book-input-rating">Rating (1.0 - 5.0)</label>
+                            <input type="number" step="0.1" min="1" max="5" id="book-input-rating" class="form-control" value="4.8">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="book-input-tags">Thematic Tags (Comma separated)</label>
+                        <input type="text" id="book-input-tags" class="form-control" placeholder="e.g. AI, Algorithms, Robotics, Neural Networks">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="book-input-desc">Synopsis / Overview</label>
+                        <textarea id="book-input-desc" rows="3" class="form-control" placeholder="Detailed description of the book..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-book-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn-save-book">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Book
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / REGISTER MEMBER -->
+    <div class="modal-overlay" id="modal-member">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-member-title">Register New Member</h3>
+                <button class="modal-close" id="btn-close-member-modal">&times;</button>
+            </div>
+            <form id="form-member">
+                <input type="hidden" id="member-edit-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="member-input-name">Full Name *</label>
+                        <input type="text" id="member-input-name" class="form-control" placeholder="e.g. John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="member-input-email">Email Address *</label>
+                        <input type="email" id="member-input-email" class="form-control" placeholder="john.doe@university.edu" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="member-input-phone">Phone Number</label>
+                        <input type="text" id="member-input-phone" class="form-control" placeholder="+1 (555) 123-4567">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="member-input-tier">Membership Tier</label>
+                            <select id="member-input-tier" class="form-control">
+                                <option value="Student">Student (Max 5 books)</option>
+                                <option value="Faculty">Faculty (Max 10 books)</option>
+                                <option value="Scholar">Scholar (Max 8 books)</option>
+                                <option value="Premium">Premium (Max 12 books)</option>
+                            </select>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="member-input-status">Status</label>
+                            <select id="member-input-status" class="form-control">
+                                <option value="Active">Active</option>
+                                <option value="Suspended">Suspended</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" id="btn-cancel-member-modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="btn-save-member">
+                        <i class="fa-solid fa-user-check"></i> Register Member
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: BOOK DETAILS & AI REPORT -->
+    <div class="modal-overlay" id="modal-book-details">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3>Book Intelligence Dossier</h3>
+                <button class="modal-close" id="btn-close-details-modal">&times;</button>
+            </div>
+            <div class="modal-body" id="book-details-content">
+                <!-- Dynamic Book Details -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="btn-details-summarize">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI Deep Summary
+                </button>
+                <button class="btn btn-primary" id="btn-details-issue">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Issue This Book
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING ATHENA AI ASSISTANT CHATBOT WIDGET -->
+    <div class="athena-widget" id="athena-widget">
+        <!-- Chat Drawer / Window -->
+        <div class="athena-chat-window hidden" id="athena-chat-window">
+            <div class="athena-chat-header">
+                <div class="athena-identity">
+                    <div class="athena-status-dot"></div>
+                    <div>
+                        <strong>Athena AI Assistant</strong>
+                        <small>Conversational Library Concierge</small>
+                    </div>
+                </div>
+                <button class="btn-icon-xs" id="btn-close-athena" title="Minimize Chat">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+            </div>
+
+            <div class="athena-messages-body" id="athena-messages-body">
+                <div class="chat-message assistant">
+                    <div class="msg-avatar"><i class="fa-solid fa-brain-circuit"></i></div>
+                    <div class="msg-content">
+                        Hello! 👋 I'm **Athena**, your AI Library Assistant. Ask me to find books, check availability, summarize topics, or explain overdue policies!
+                    </div>
+                </div>
+            </div>
+
+            <div class="athena-suggested-actions" id="athena-suggested-actions">
+                <button class="chip-sm" data-msg="Recommend top rated books">Top Books</button>
+                <button class="chip-sm" data-msg="Show me AI & machine learning books">AI Titles</button>
+                <button class="chip-sm" data-msg="How do loan renewals work?">Renewal Rules</button>
+            </div>
+
+            <div class="athena-chat-footer">
+                <input type="text" id="athena-chat-input" placeholder="Ask Athena anything..." autocomplete="off">
+                <button class="btn-send" id="btn-send-athena" aria-label="Send message">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Floating Trigger Button -->
+        <button class="athena-fab" id="athena-fab" title="Chat with Athena AI">
+            <i class="fa-solid fa-sparkles fab-sparkle"></i>
+            <i class="fa-solid fa-robot fab-main-icon"></i>
+            <span class="fab-badge">AI</span>
+        </button>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- SCRIPT ENTRY -->
+    <script src="js/app.js"></script>
+</body>
+</html>

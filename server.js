@@ -59,18 +59,25 @@ app.use((err, req, res, next) => {
 });
 
 // Start Server & Auto-Check DB
+let serverInstance = null;
 async function startServer() {
+    if (serverInstance) return serverInstance;
     try {
         await db.initDB();
         await seedDatabase();
 
-        app.listen(PORT, "0.0.0.0", () => {
-            console.log("==================================================");
-            console.log(`🚀 AI-Powered Library System is running!`);
-            console.log(`🌐 Dashboard: http://0.0.0.0:${PORT}`);
-            console.log(`📡 API Health: http://0.0.0.0:${PORT}/api/health`);
-            console.log(`💾 DB Engine: ${db.getEngine().engine.toUpperCase()}`);
-            console.log("==================================================");
+        return new Promise((resolve) => {
+            serverInstance = app.listen(PORT, "0.0.0.0", () => {
+                console.log("==================================================");
+                console.log(`🚀 AthenaLib - AI Library System is running!`);
+                console.log(`🌐 Dashboard:    http://localhost:${PORT}`);
+                console.log(`🌐 Local Link:   http://127.0.0.1:${PORT}`);
+                console.log(`📡 API Health:   http://localhost:${PORT}/api/health`);
+                console.log(`💾 DB Engine:    ${db.getEngine().engine.toUpperCase()}`);
+                console.log("==================================================");
+                console.log(`👉 Click the link above to open in your browser`);
+                resolve(serverInstance);
+            });
         });
     } catch (err) {
         console.error("Failed to start server:", err);
@@ -78,4 +85,7 @@ async function startServer() {
     }
 }
 
+// Auto-start if run directly or as main script
 startServer();
+
+module.exports = { app, startServer };

@@ -54,15 +54,8 @@ npm start
 
 ### 2. Access the Application
 Open your browser and navigate to:
-https://ai-powered-library-management-system-1.onrender.com
+https://brother-demonstrates-geography-alleged.trycloudflare.com
 ```
-http://localhost:5000
-```
-- **Dashboard UI**: `http://localhost:5000`
-- **API Health Check**: `http://localhost:5000/api/health`
-
----
-
 ## 🗄️ Database Configuration (Resilient Dual-Engine)
 
 AthenaLib is engineered to **never fail on database startup**:

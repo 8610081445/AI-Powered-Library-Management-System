@@ -54,6 +54,7 @@ npm start
 
 ### 2. Access the Application
 Open your browser and navigate to:
+https://ai-powered-library-management-system-1.onrender.com
 ```
 http://localhost:5000
 ```

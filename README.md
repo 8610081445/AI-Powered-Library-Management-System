@@ -54,7 +54,7 @@ npm start
 
 ### 2. Access the Application
 Open your browser and navigate to:
-https://brother-demonstrates-geography-alleged.trycloudflare.com
+https://ai-powered-library-management-system-1.onrender.com
 ```
 ## 🗄️ Database Configuration (Resilient Dual-Engine)
 
